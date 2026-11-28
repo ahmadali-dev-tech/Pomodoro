@@ -1,0 +1,160 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Design tokens. Every surface, border, text colour and accent in the app reads from these,
+  so a theme preset restyles the whole product rather than just the background.
+  Presets are keyed by html[data-preset]; light/dark by html.light / html.dark.
+*/
+:root {
+  color-scheme: dark;
+  --bg: #14181D;
+  --surface: #1A2027;
+  --raised: #212932;
+  --line: #2B343F;
+  --line-strong: #3A4552;
+  --text: #E9EDF1;
+  --muted: #9AA6B3;
+  --faint: #808C9A;
+  --accent: #F2704F;
+  --accent-fg: #1B0A06;
+  --success: #4CC38A;
+  --success-fg: #06180F;
+  --warning: #E8B04A;
+  --danger: #F0707A;
+  --danger-fg: #1D0A0C;
+  --pop-shadow: 0 10px 30px rgba(0, 0, 0, .40);
+}
+
+:root.light {
+  color-scheme: light;
+  --bg: #EDF0F3;
+  --surface: #FFFFFF;
+  --raised: #F4F6F8;
+  --line: #DCE1E7;
+  --line-strong: #BFC8D2;
+  --text: #161D25;
+  --muted: #566371;
+  --faint: #66727F;
+  --accent: #C7391F;
+  --accent-fg: #FFFFFF;
+  --success: #17734D;
+  --success-fg: #FFFFFF;
+  --warning: #8F5A06;
+  --danger: #B72C3C;
+  --danger-fg: #FFFFFF;
+  --pop-shadow: 0 10px 30px rgba(22, 29, 37, .14);
+}
+
+/* Theme presets. Each one tints the neutrals and sets its own accent, in both modes. */
+:root.dark[data-preset="ocean"]   { --bg:#101820; --surface:#16212B; --raised:#1D2A36; --line:#283847; --line-strong:#364B5E; --accent:#4AA3DF; --accent-fg:#06121B; }
+:root.light[data-preset="ocean"]  { --bg:#E9F0F5; --surface:#FFFFFF; --raised:#F2F7FA; --line:#D3DEE7; --line-strong:#B6C5D2; --accent:#1B66A0; --accent-fg:#FFFFFF; }
+:root.dark[data-preset="purple"]  { --bg:#17141E; --surface:#1E1A27; --raised:#272232; --line:#342D41; --line-strong:#453C56; --accent:#AD8AE4; --accent-fg:#150B22; }
+:root.light[data-preset="purple"] { --bg:#EFEDF4; --surface:#FFFFFF; --raised:#F7F5FA; --line:#DDD7E6; --line-strong:#C3BAD2; --accent:#7343B0; --accent-fg:#FFFFFF; }
+:root.dark[data-preset="emerald"]  { --bg:#121A17; --surface:#18221E; --raised:#202C27; --line:#2B3A33; --line-strong:#3A4D44; --accent:#4DB88A; --accent-fg:#06180F; }
+:root.light[data-preset="emerald"] { --bg:#EAF1EE; --surface:#FFFFFF; --raised:#F4F8F6; --line:#D5E1DB; --line-strong:#B7C9BF; --accent:#1F7355; --accent-fg:#FFFFFF; }
+:root.dark[data-preset="rose"]  { --bg:#1A1419; --surface:#221A20; --raised:#2B2128; --line:#3A2D36; --line-strong:#4D3C47; --accent:#E7819F; --accent-fg:#220A12; }
+:root.light[data-preset="rose"] { --bg:#F4EDF0; --surface:#FFFFFF; --raised:#FAF5F7; --line:#E5D6DD; --line-strong:#CDB7C1; --accent:#B13E69; --accent-fg:#FFFFFF; }
+:root.dark[data-preset="sunset"]  { --bg:#1A1612; --surface:#221D17; --raised:#2B241D; --line:#3A3126; --line-strong:#4E4234; --accent:#E59A3A; --accent-fg:#1F1103; }
+:root.light[data-preset="sunset"] { --bg:#F2EEE8; --surface:#FFFFFF; --raised:#F9F6F1; --line:#E4DCCF; --line-strong:#CABFAD; --accent:#A55F0A; --accent-fg:#FFFFFF; }
+
+/* Derived tints: computed from the active tokens so presets and custom accents stay consistent. */
+:root {
+  --accent-soft: color-mix(in srgb, var(--accent) 14%, var(--surface));
+  --success-soft: color-mix(in srgb, var(--success) 14%, var(--surface));
+  --warning-soft: color-mix(in srgb, var(--warning) 16%, var(--surface));
+  --danger-soft: color-mix(in srgb, var(--danger) 14%, var(--surface));
+  --ring: color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+@layer base {
+  * { box-sizing: border-box; }
+  html, body, #root { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Hanken Grotesk Variable', ui-sans-serif, system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  h1, h2, h3 { margin: 0; }
+  button { font: inherit; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  ::selection { background: var(--accent-soft); }
+  select { color-scheme: inherit; }
+  option, optgroup { background: var(--surface); color: var(--text); }
+  input[type="number"] { appearance: textfield; -moz-appearance: textfield; }
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+  input[type="date"]::-webkit-calendar-picker-indicator { opacity: .6; cursor: pointer; }
+  :root.dark input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
+}
+
+@layer components {
+  .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+  .divide-line > * + * { border-top: 1px solid var(--line); }
+
+  .field {
+    width: 100%;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--line-strong);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 14px;
+    line-height: 20px;
+    transition: border-color .12s, box-shadow .12s;
+  }
+  .field::placeholder { color: var(--faint); }
+  .field:hover { border-color: color-mix(in srgb, var(--line-strong) 70%, var(--text)); }
+  .field:focus-visible { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--ring); }
+  .field[aria-invalid="true"] { border-color: var(--danger); }
+  .field:disabled { opacity: .55; cursor: not-allowed; }
+  textarea.field { resize: vertical; min-height: 72px; }
+  select.field { appearance: none; padding-right: 32px; cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238a96a3' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 10px center; }
+  .field-sm { padding: 5px 10px; font-size: 13px; }
+
+  .sr-only-focusable:not(:focus):not(:focus-within) {
+    position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+  }
+}
+
+/* Route transition: short and quiet. Respect reduced motion. */
+@keyframes page-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+.page-enter { animation: page-in .16s ease-out both; }
+@keyframes dialog-in { from { opacity: 0; transform: translateY(6px) scale(.985); } to { opacity: 1; transform: none; } }
+.dialog-enter { animation: dialog-in .14s ease-out both; }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+.fade-enter { animation: fade-in .14s ease-out both; }
+@keyframes drawer-in { from { transform: translateX(-100%); } to { transform: none; } }
+.drawer-enter { animation: drawer-in .18s ease-out both; }
+@keyframes pulse-soft { 50% { opacity: .5; } }
+.skeleton { background: var(--raised); border-radius: 6px; animation: pulse-soft 1.4s ease-in-out infinite; }
+
+.scroll-quiet { scrollbar-width: none; }
+.scroll-quiet::-webkit-scrollbar { display: none; }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 10px; border: 2px solid var(--bg); }
+::-webkit-scrollbar-track { background: transparent; }
+
+.tnum { font-variant-numeric: tabular-nums; }
+.font-display { font-family: 'Bricolage Grotesque Variable', 'Hanken Grotesk Variable', ui-sans-serif, sans-serif; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+
+/* Safe areas for phones with a home indicator. */
+.safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+
+/* Range slider (volume) */
+input[type="range"] { -webkit-appearance: none; appearance: none; height: 4px; border-radius: 999px; background: var(--line-strong); cursor: pointer; }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); border: 2px solid var(--surface); box-shadow: 0 0 0 1px var(--accent); }
+input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: var(--accent); border: 2px solid var(--surface); }
+input[type="range"]:focus-visible { outline-offset: 6px; }
